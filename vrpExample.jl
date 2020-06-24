@@ -25,25 +25,12 @@ model = Model(GLPK.Optimizer)
 # minimiser la distance totale parcourue par les véhicules
 @objective(model, Min, sum(c[i,j]*x[i,j,k] for i in 1:N, j in 1:N, k in 1:m))
 
-# # chaque sommet doit être servi exactement une fois <=> contrainte 14
-# @constraint(model, [i in m+1:N], sum(x[i,j,k] for k in 1:m, j in m+1:N) == 1)
-
 # chaque paire origine/destination doit être traversée exactement une fois 
 # par un seul véhicule <=> contrainte 14
 @constraint(model, [i in m+1:m+n], sum(x[i,j,k] for k in 1:m, j = i + n) == 1)
 
-
-
-
-
 # Pour chaque destination, il y a exactement un véhicule entrant
 @constraint(model, [j in m+1:N], sum(x[i,j,k] for i in 1:N, k in 1:m) == 1)
-
-
-
-
-
-
 
 # # Il y a au moins un véhicule monopolisé, partant de son point de départ vers 
 # # une origine (point de chargement) <=> contrainte 15
@@ -52,6 +39,10 @@ model = Model(GLPK.Optimizer)
 # # Tout véhicule entrant doit sortir (Flot réseau -> théorie graphes) <=> contrainte 17
 # @constraint(model, [j in 1:N, k in 1:m], 
 #         sum(x[i,j,k] for i in 1:N) - sum(x[j,i,k] for i in 1:N) == 0)
+
+# # A la fois l'origine et la destination doivent être servi par un même véhicule
+# # <=> contrainte 22
+# @constraint(model, [i in m+1:m+n, k in 1:m], sum(x[i,j,k] for j in 1:N) - sum(x[i+n,j,k] for j in 1:N) == 0)
 
 optimize!(model)
 
