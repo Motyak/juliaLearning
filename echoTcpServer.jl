@@ -1,15 +1,18 @@
 using Sockets
+
+function process()
+    return "bonjour"
+end
+
 server = listen(8080)
 while true
   conn = accept(server)
   @async begin
     try
-      while true
-        line = readline(conn)
-        write(conn,line)
-      end
+        println(process())
     catch err
       print("connection ended with error $err")
     end
   end
 end
+
