@@ -1,4 +1,4 @@
-jsonStr = "{\"m\":2,\"n\":2,\"N\":6,\"c\":[[10000,10000,20,10000,10000,10000],[10000,10000,10000,257,10000,10000],[20,10000,10000,312,312,10000],[10000,257,10000,10000,130,140],[10000,10000,312,130,10000,10000],[10000,10000,10000,140,10000,10000]]}"
+jsonStr = "{\"m\":2,\"n\":2,\"c\":[[10000,10000,20,10000,10000,10000],[10000,10000,10000,257,10000,10000],[20,10000,10000,312,312,10000],[10000,257,10000,10000,130,140],[10000,10000,312,130,10000,10000],[10000,10000,10000,140,10000,10000]]}"
 data = JSON.parse(jsonStr)
 
 #nb de voitures
@@ -6,7 +6,7 @@ m = data["m"]
 #nb d'origines/destinations (appairés donc même nombre)
 n = data["n"]
 #nb de sommets (total point départ véhicules + origines + destinations)
-N = data["N"]
+N = 2*n+m
 # distance entre les sommets i et j
 c_arrOfAny = data["c"]
 c = Array{Int64, 2}(undef, N, N)
@@ -35,4 +35,17 @@ optimize!(model)
 
 println("Objective value: ", objective_value(model))
 println("Solve time: ", solve_time(model))
-println("x = ", value.(x))
+# println("x = ", value.(x))
+
+res = Array{Bool, 3}(undef, m, N, N)
+for k = 1:m
+    for j = 1:N
+        for i = 1:N
+            # on inverse l'ordre des indices car [k,j,i] => [i][j][k] en json
+            res[k,j,i] = value.(x[i,j,k])
+        end
+    end
+end
+
+println("res = \n", res)
+println("res as json = \n", JSON.json(res))
