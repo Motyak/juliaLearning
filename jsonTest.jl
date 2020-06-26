@@ -35,7 +35,7 @@ optimize!(model)
 
 println("Objective value: ", objective_value(model))
 println("Solve time: ", solve_time(model))
-# println("x = ", value.(x))
+println("x = ", value.(x))
 
 res = Array{Bool, 3}(undef, m, N, N)
 for k = 1:m
@@ -47,5 +47,5 @@ for k = 1:m
     end
 end
 
-println("res = \n", res)
+# println("res = \n", res)
 println("res as json = \n", JSON.json(res))
