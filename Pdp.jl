@@ -4,24 +4,19 @@ module Pdp
     using Dates     #timestamp
 
     struct Input
-        m::UInt16
-        n::UInt16
-        c::Array{UInt16, 2}
+        m::UInt16           #nombre de véhicules/transporteurs
+        n::UInt16           #nombre de paires origine;destination (clients)
+        c::Array{UInt16, 2} #matrice représentant la distance entre un sommet i et j
     end
 
     struct Output
         objectiveValue::Float32
         timestamp::DateTime
         solveTime::Float32
-        res::Array{Bool, 3}
+        res::Array{Bool, 3} # = 1 si le véhicule k parcourt l'arc allant du sommet i à j
     end
 
-    # m : nombre de véhicules/transporteurs
-    # n : nombre de paires origine/destination, soit nb de clients à servir
-    # c_param : matrice représentant la distance entre un sommet i et j
-    # 
-    # retourne x, matrice tridimensionnelle binaire indiquant si
-    #   le véhicule k a parcouru l'arc allant du sommet i à j
+    # retourne une Output
     function solve(input)
         timestamp = now()
         m, n, c = input.m, input.n, input.c
@@ -49,6 +44,7 @@ module Pdp
         return Output(objective_value(model), timestamp, solve_time(model), value.(x))
     end
 
+    # test unitaire
     function test()
         c = [10000 10000 20 10000 10000 10000;
             10000 10000 10000 257 10000 10000;
