@@ -1,7 +1,7 @@
 module PdpJson
-    using JSON      #serialization and parsing
     include("Pdp.jl")
     using .Pdp
+    using JSON      #serialization and parsing
 
     # retourne une Input
     function parse(jsonInput)
@@ -28,9 +28,8 @@ module PdpJson
         solveTime = JSON.json(output.solveTime)
 
         m, N = size(output.res, 3), size(output.res, 2)
-        println("m, n = ", m, ", ", N)
         res = Array{Bool, 3}(undef, m, N, N)
-        for k = 1:m     #nb de dimensions
+        for k = 1:m
             for j = 1:N
                 for i = 1:N
                     # on inverse l'ordre des indices car [k,j,i] => [i][j][k] en json
