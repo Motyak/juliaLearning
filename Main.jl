@@ -1,4 +1,7 @@
 include("Pdp.jl")
 using .Pdp
 
-Pdp.test()
+include("PdpJson.jl")
+using .PdpJson
+
+PdpJson.test()

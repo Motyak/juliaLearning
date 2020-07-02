@@ -10,7 +10,7 @@ module Pdp
     end
 
     struct Output
-        objectiveValue::Float32
+        objectiveValue::UInt16
         timestamp::DateTime
         solveTime::Float32
         res::Array{Bool, 3} # = 1 si le véhicule k parcourt l'arc allant du sommet i à j
