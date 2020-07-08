@@ -6,8 +6,8 @@ using .Pdp
 using .PdpJson
 using .Tcp
 
-# Pdp.test()
+Pdp.test()
 # PdpJson.test()
 # Tcp.test()
 
-Tcp.launch(Tcp.Server(ip"127.0.0.1", 8080, x -> PdpJson.json(Pdp.solve(PdpJson.parse(x)))))
+# Tcp.launch(Tcp.Server(ip"127.0.0.1", 8080, x -> PdpJson.json(Pdp.solve(PdpJson.parse(x)))))
