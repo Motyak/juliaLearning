@@ -19,13 +19,16 @@ module Tcp
 				try
 					while true
 						println("Waiting for input..")
-						line = readline(conn)
-						if !isempty(line)
-							println("Processing input..")
-							output = server.process(line)
-							println("Sending back output to client..")
-							write(conn, output)
+						msg = ""
+						endOfStream = false
+						while !endOfStream
+							msg = msg * readline(conn)
+							endOfStream = (isempty(msg) || msg[end] == '}')
 						end
+						println("Processing input..")
+						output = server.process(msg)
+						println("Sending back output to client..")
+						write(conn, output)
 						close(conn)
 						println("Connection closed.\n")
 						break
