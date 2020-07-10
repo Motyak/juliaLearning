@@ -60,11 +60,15 @@ module PdpJson
         end
         res = JSON.json(res)
 
-        return string("{\"objectiveValue\":", objectiveValue, 
-        ",\"objectiveTimes\":", objectiveTimes,
-        ",\"timestamp\":", timestamp, 
-        ",\"solveTime\":", solveTime, 
-        ",\"res\":", res, "}")
+        io = IOBuffer()
+        unindentedJson = string("{\"objectiveValue\":", objectiveValue, 
+                ",\"objectiveTimes\":", objectiveTimes,
+                ",\"timestamp\":", timestamp, 
+                ",\"solveTime\":", solveTime, 
+                ",\"res\":", res, "}")
+        JSON.print(io, JSON.parse(unindentedJson), 4)
+
+        return read(seekstart(io), String)
     end
 
     # test unitaire
