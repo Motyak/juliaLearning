@@ -3,7 +3,7 @@ module Tcp
 
 	struct Server
 		host::IPAddr
-		port::UInt16
+		port::Int16
 		process::Function
 	end
 

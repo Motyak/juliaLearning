@@ -4,17 +4,17 @@ module Pdp
     using Dates     #timestamp
 
     struct Input
-        m::UInt16           #nombre de véhicules/transporteurs
-        n::UInt16           #nombre de paires origine;destination (clients)
-        c::Array{UInt16, 2} #matrice représentant la distance entre un sommet i et j
-        t::Array{UInt16, 2} #matrice des durées de trajet du sommet i à j (en minutes)
-        e::Array{UInt16}    #temps au plus tot pour commencer le service au sommet i
-        l::Array{UInt16}    #temps au plus tard pour commencer le service au sommet i
+        m::Int16           #nombre de véhicules/transporteurs
+        n::Int16           #nombre de paires origine;destination (clients)
+        c::Array{Int16, 2} #matrice représentant la distance entre un sommet i et j
+        t::Array{Int16, 2} #matrice des durées de trajet du sommet i à j (en minutes)
+        e::Array{Int16}    #temps au plus tot pour commencer le service au sommet i
+        l::Array{Int16}    #temps au plus tard pour commencer le service au sommet i
     end
 
     struct Output
-        objectiveValue::UInt16  #distance totale parcourue
-        objectiveTimes::Array{UInt16, 2}    #temps prévus chaque sommet chaque vehicule
+        objectiveValue::Int16  #distance totale parcourue
+        objectiveTimes::Array{Int16, 2}    #temps prévus chaque sommet chaque vehicule
         timestamp::DateTime
         solveTime::Float32
         res::Array{Bool, 3} # = 1 si le véhicule k parcourt l'arc allant du sommet i à j

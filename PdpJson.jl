@@ -11,19 +11,40 @@ module PdpJson
         N = 2*n+m
 
         c_arrOfAny = data["c"]
-        c = Array{UInt16, 2}(undef, N, N)
+        c = Array{Int16, 2}(undef, N, N)
         for i = 1:N
             for j = 1:N
                 c[i,j] = c_arrOfAny[i][j]
             end
         end
 
-        return Pdp.Input(m, n, c)
+        t_arrOfAny = data["t"]
+        t = Array{Int16, 2}(undef, N, N)
+        for i = 1:N
+            for j = 1:N
+                t[i,j] = t_arrOfAny[i][j]
+            end
+        end
+
+        e_arrOfAny = data["e"]
+        e = Array{Int16}(undef, N)
+        for i = 1:N
+            e[i] = e_arrOfAny[i]
+        end
+
+        l_arrOfAny = data["l"]
+        l = Array{Int16}(undef, N)
+        for i = 1:N
+            l[i] = l_arrOfAny[i]
+        end
+
+        return Pdp.Input(m, n, c, t, e, l)
     end
 
     # retourne un string représentatif d'une Output au format JSON
     function json(output)
         objectiveValue = JSON.json(output.objectiveValue)
+        objectiveTimes = JSON.json(output.objectiveTimes)
         timestamp = JSON.json(output.timestamp)
         solveTime = JSON.json(output.solveTime)
 
@@ -40,6 +61,7 @@ module PdpJson
         res = JSON.json(res)
 
         return string("{\"objectiveValue\":", objectiveValue, 
+        ",\"objectiveTimes\":", objectiveTimes,
         ",\"timestamp\":", timestamp, 
         ",\"solveTime\":", solveTime, 
         ",\"res\":", res, "}")
@@ -47,11 +69,14 @@ module PdpJson
 
     # test unitaire
     function test()
-        jsonInput = "{\"m\":2,\"n\":2,\"c\":[[10000,10000,20,10000,10000,10000],[10000,10000,10000,257,10000,10000],[20,10000,10000,312,312,10000],[10000,257,10000,10000,130,140],[10000,10000,312,130,10000,10000],[10000,10000,10000,140,10000,10000]]}"
+        jsonInput = "{\"m\":2,\"n\":2,\"N\":6,\"c\":[[1000,1000,20,1000,1000,1000],[1000,1000,1000,257,1000,1000],[20,1000,1000,312,312,1000],[1000,257,1000,1000,130,140],[1000,1000,312,130,1000,1000],[1000,1000,1000,140,1000,1000]],\"t\":[[1440,1440,2,1440,1440,1440],[1440,1440,1440,31,1440,1440],[2,1440,1440,37,37,1440],[1440,31,1440,1440,16,17],[1440,1440,37,16,1440,1440],[1440,1440,1440,17,1440,1440]],\"e\":[0,0,750,825,0,0],\"l\":[2879,2879,765,840,2879,2879]}"
         input = parse(jsonInput)
         println("m = ", input.m)
         println("n = ", input.n)
         println("c = ", input.c)
+        println("t = ", input.t)
+        println("e = ", input.e)
+        println("l = ", input.l)
 
         output = Pdp.solve(input)
         jsonOutput = json(output)
