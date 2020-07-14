@@ -13,8 +13,8 @@ module Pdp
     end
 
     struct Output
-        objectiveValue::Int16  #distance totale parcourue
-        objectiveTimes::Array{Int16, 2}    #temps prévus chaque sommet chaque vehicule
+        objectiveValue::Int16           #distance totale parcourue
+        objectiveTimes::Array{Int16, 2} #temps prévus chaque sommet chaque vehicule
         timestamp::DateTime
         solveTime::Float32
         res::Array{Bool, 3} # = 1 si le véhicule k parcourt l'arc allant du sommet i à j
@@ -23,7 +23,6 @@ module Pdp
     # retourne une Output
     function solve(input)
         timestamp = now()
-        # m, n, c = input.m, input.n, input.c
         m, n, c, t, e, l = input.m, input.n, input.c, input.t, input.e, input.l
 
         #nb de sommets (total points départs véhicules + origines + destinations)
@@ -45,10 +44,9 @@ module Pdp
         # par un seul véhicule <=> contrainte 14
         @constraint(model, [i in m+1:m+n], sum(x[i,j,k] for k in 1:m, j = i + n) == 1)
 
-        # faire une contrainte specifiant qu'au moins un des sommets 
-        # entre 1 et m doit obligatoirement être emprunté ? <=> a celle du dessous
-
-        # Pour chaque destination, il y a exactement un véhicule entrant
+        # Pour chaque origine/destination, il y a exactement un véhicule entrant.
+        # Permet de prendre en compte les trajets allant d'une destination à la 
+        # prochaine origine et point de départ véhicule vers une première origine.
         @constraint(model, [j in m+1:N], sum(x[i,j,k] for i in 1:N, k in 1:m) == 1)
 
         # # conservation du flot dans le reseau (theorie des graphes) <=> contrainte 17
@@ -59,10 +57,11 @@ module Pdp
         # @constraint(model, [i in m+1:N, j in m+1:N, k in 1:m], 
         #         x[i,j,k]*(B[i,k]+t[i,j]) <= B[j,k])
 
-        # # a la fois l'origine et la destination doivent être servies 
-        # # par un meme vehicule <=> contrainte 22
-        # @constraint(model, [i in m+1:m+n, k in 1:m], 
-        #         sum(x[i,j,k] for j in m+1:N) - sum(x[i+n,j,k] for j in m+1:N) == 0)
+        # Le véhicule ayant la responsabilité de prendre un client à un sommet
+        # d'origine doit également faire le trajet de ce sommet d'origine vers
+        # le sommet destination correspondant. <=> contrainte 22
+        @constraint(model, [j in m+1:m+n], 
+                sum(x[i,j,k] for i in 1:N, k in 1:m) - sum(x[j,j+n,k] for k in 1:m) == 0)
 
         # # le temps prévu pour l'origine doit être inférieur au temps prévu 
         # # pour la destination <=> contrainte 23
@@ -95,7 +94,7 @@ module Pdp
 
         e = [0, 0, 750, 825, 0, 0]
 
-        l = [2879, 2879, 765, 840, 2879, 2879]
+        l = [2879, 2879, 765, 840, 809, 849]
 
         input = Input(2, 2, c, t, e, l)
 
