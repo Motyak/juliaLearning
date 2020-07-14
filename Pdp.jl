@@ -44,7 +44,7 @@ module Pdp
         # par un seul véhicule <=> contrainte 14
         @constraint(model, [i in m+1:m+n], sum(x[i,j,k] for k in 1:m, j = i + n) == 1)
 
-        # Pour chaque origine/destination, il y a exactement un véhicule entrant.
+        # Pour chaque origine/destination, il y a 1 véhicule entrant.
         # Permet de prendre en compte les trajets allant d'une destination à la 
         # prochaine origine et point de départ véhicule vers une première origine.
         @constraint(model, [j in m+1:N], sum(x[i,j,k] for i in 1:N, k in 1:m) == 1)
@@ -53,7 +53,8 @@ module Pdp
         # @constraint(model, [j in m+1:N, k in 1:m], 
         #         sum(x[i,j,k] for i in m+1:N) - sum(x[j,i,k] for i in m+1:N) == 0)
 
-        # # empecher les détours et faciliter contraintes de temps <=> contrainte 18
+        # # Le temps d'arrivée au sommet j doit être inférieur au temps de départ au
+        # # sommet i + la durée de parcours de (i,j) <=> contrainte 18
         # @constraint(model, [i in m+1:N, j in m+1:N, k in 1:m], 
         #         x[i,j,k]*(B[i,k]+t[i,j]) <= B[j,k])
 
@@ -63,12 +64,12 @@ module Pdp
         @constraint(model, [j in m+1:m+n], 
                 sum(x[i,j,k] for i in 1:N, k in 1:m) - sum(x[j,j+n,k] for k in 1:m) == 0)
 
-        # # le temps prévu pour l'origine doit être inférieur au temps prévu 
-        # # pour la destination <=> contrainte 23
-        # @constraint(model, [i in m+1:m+n, k in 1:m], B[i,k] <= B[i+n,k])
+        # le temps prévu pour l'origine doit être inférieur au temps prévu 
+        # pour la destination <=> contrainte 23
+        @constraint(model, [i in m+1:m+n, k in 1:m], B[i,k] <= B[i+n,k])
 
-        # # respect des fenetres de temps <=> contrainte 25
-        # @constraint(model, [i in m+1:N, k in 1:m], e[i] <= B[i,k] <= l[i])
+        # respect des fenetres de temps <=> contrainte 25
+        @constraint(model, [i in m+1:N, k in 1:m], e[i] <= B[i,k] <= l[i])
 
         optimize!(model)
 
