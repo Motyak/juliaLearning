@@ -50,8 +50,11 @@ module Pdp
         @constraint(model, [j in m+1:N], sum(x[i,j,k] for i in 1:N, k in 1:m) == 1)
 
         # # conservation du flot dans le reseau (theorie des graphes) <=> contrainte 17
-        # @constraint(model, [j in m+1:N, k in 1:m], 
-        #         sum(x[i,j,k] for i in m+1:N) - sum(x[j,i,k] for i in m+1:N) == 0)
+        # @constraint(model, [j in 1:N, k in 1:m], 
+        #         sum(x[i,j,k] for i in 1:N) - sum(x[j,i,k] for i in 1:N) == 0)
+
+        # # Un même véhicule ne peut parcourir qu'un seul arc par sommet de départ
+        # @constraint(model, [i in 1:N, k in 1:m], sum(x[i,j,k] for j in m+1:N) == 1)
 
         # # Le temps d'arrivée au sommet j doit être inférieur au temps de départ au
         # # sommet i + la durée de parcours de (i,j) <=> contrainte 18
@@ -98,6 +101,26 @@ module Pdp
         l = [2879, 2879, 765, 840, 809, 849]
 
         input = Input(2, 2, c, t, e, l)
+
+        # c = [10000 300 400 10000 10000;
+        #     10000 10000 10000 800 10000;
+        #     10000 10000 10000 10000 700;
+        #     10000 10000 1400 10000 10000;
+        #     1300 10000 10000 10000 10000]
+        
+        # t = [1440 15 20 1440 1440;
+        #     1440 1440 1440 40 1440;
+        #     1440 1440 1440 1440 35;
+        #     1440 1440 70 1440 1440;
+        #     65 1440 1440 1440 1440]
+        
+        # TIME_NOW = 720
+        
+        # e = [TIME_NOW, TIME_NOW, TIME_NOW, TIME_NOW, TIME_NOW]
+        
+        # l = [2879, TIME_NOW, TIME_NOW, TIME_NOW + 60, TIME_NOW + 60]
+        
+        # input = Input(1, 2, c, t, e, l)
 
         output = solve(input)
 
