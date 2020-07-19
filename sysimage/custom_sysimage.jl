@@ -14,7 +14,7 @@ using JSON      #serialization and parsing
             eval(@__MODULE__, :(const $(Symbol(mod)) = $mod))
         end
     end
-    for statement in readlines("csv_precompile.jl")
+    for statement in readlines("sysimage/generate_precompile.jl")
         try
             Base.include_string(@__MODULE__, statement)
         catch
