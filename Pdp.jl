@@ -1,7 +1,11 @@
 module Pdp
     using JuMP      #ilp/mip model
     using GLPK      #optimizer
+    # using CPLEX   #alternative optimizer
     using Dates     #timestamp
+
+    include("Solver.jl")
+    using .Solver   #enum
 
     struct Input
         m::Int16           #nombre de véhicules/transporteurs
@@ -21,14 +25,19 @@ module Pdp
     end
 
     # retourne une Output
-    function solve(input)
+    function solve(input, optimizer=Solver.GLPK)
         timestamp = now()
         m, n, c, t, e, l = input.m, input.n, input.c, input.t, input.e, input.l
 
+        if optimizer == Main.Solver.GLPK
+            model = Model(GLPK.Optimizer)
+        elseif optimizer == Main.Solver.CPLEX
+            model = Model(CPLEX.Optimizer)
+        end
+        println("Optimizer used : ", optimizer)
+
         #nb de sommets (total points départs véhicules + origines + destinations)
         N = 2*n+m
-
-        model = Model(GLPK.Optimizer)
 
         # = 1 si le véhicule k a traversé la route (i,j), 0 sinon
         @variable(model, x[1:N,1:N,1:m], Bin)

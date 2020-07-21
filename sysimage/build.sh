@@ -6,4 +6,3 @@ julia --startup-file=no --output-o sysimage/sys.o -J$DEF_PATH sysimage/custom_sy
 gcc -shared -o sysimage/sys.so -Wl,--whole-archive sysimage/sys.o -Wl,--no-whole-archive -L$JULIA_LIB_PATH -ljulia
 rm sysimage/generate_main_precompile.jl
 rm sysimage/sys.o
-

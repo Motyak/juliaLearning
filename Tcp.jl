@@ -3,7 +3,7 @@ module Tcp
 
 	struct Server
 		host::IPAddr
-		port::Int16
+		port::Int32
 		process::Function
 	end
 
@@ -23,7 +23,7 @@ module Tcp
 						endOfStream = false
 						while !endOfStream
 							msg = msg * readline(conn)
-							endOfStream = (isempty(msg) || msg[end] == '}')
+							endOfStream = (isempty(msg) || msg[begin] != '{' || msg[end] == '}')
 						end
 						println("Processing input..")
 						output = server.process(msg)

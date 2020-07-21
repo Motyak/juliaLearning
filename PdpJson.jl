@@ -1,7 +1,8 @@
 module PdpJson
-    include("Pdp.jl")
-    using .Pdp
     using JSON      #serialization and parsing
+    
+    include("Pdp.jl")
+    using .Pdp 
 
     # retourne une Input
     function parse(jsonInput)
