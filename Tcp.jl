@@ -17,24 +17,22 @@ module Tcp
 			println("Connection accepted : ", conn)
 			@async begin
 				try
-					while true
-						println("Waiting for input..")
-						msg = ""
-						endOfStream = false
-						while !endOfStream
-							msg = msg * readline(conn)
-							endOfStream = (isempty(msg) || msg[begin] != '{' || msg[end] == '}')
-						end
-						println("Processing input..")
-						output = server.process(msg)
-						println("Sending back output to client..")
-						write(conn, output)
-						close(conn)
-						println("Connection closed.\n")
-						break
+					println("Waiting for input..")
+					msg = ""
+					endOfStream = false
+					while !endOfStream
+						msg = msg * readline(conn)
+						endOfStream = (isempty(msg) || msg[begin] != '{' || msg[end] == '}')
 					end
+					println("Processing input..")
+					output = server.process(msg)
+					println("Sending back output to client..")
+					write(conn, output)
+					close(conn)
+					println("Connection closed.\n")
 				catch err
 					print("Connection ended with error $err")
+					close(conn)
 				end
 			end
 		end
