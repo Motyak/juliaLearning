@@ -1,12 +1,23 @@
-LOAD_PATH = String[]
-DEPOT_PATH = String[]
 Base.reinit_stdio()
 Base.init_depot_path()
 Base.init_load_path()
+# Manually adding stdlib path because '@stdlib' is not working
+push!(LOAD_PATH, "/opt/julia-1.4.2/share/julia/stdlib/v1.4")
 
-using JuMP      #ilp/mip model
-using GLPK      #optimizer
-using JSON      #serialization and parsing
+# using JuMP
+# using GLPK
+# using JSON
+# using Dates
+# using Sockets
+
+include("../Solver.jl")
+include("../Pdp.jl")
+include("../PdpJson.jl")
+include("../Tcp.jl")
+using .Solver
+using .Pdp
+using .PdpJson
+using .Tcp
 
 @eval Module() begin
     for (pkgid, mod) in Base.loaded_modules
@@ -14,7 +25,7 @@ using JSON      #serialization and parsing
             eval(@__MODULE__, :(const $(Symbol(mod)) = $mod))
         end
     end
-    for statement in readlines("sysimage/generate_precompile.jl")
+    for statement in readlines("sysimage/precompile.jl")
         try
             Base.include_string(@__MODULE__, statement)
         catch
