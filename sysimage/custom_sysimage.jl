@@ -1,14 +1,14 @@
 Base.reinit_stdio()
 Base.init_depot_path()
 Base.init_load_path()
-# Manually adding stdlib path because '@stdlib' is not working
-push!(LOAD_PATH, "/opt/julia-1.4.2/share/julia/stdlib/v1.4")
 
-# using JuMP
-# using GLPK
-# using JSON
-# using Dates
-# using Sockets
+STDLIB_PATH="/opt/julia-1.4.2/share/julia/stdlib/v1.4"
+if length(ARGS) > 1
+    STDLIB_PATH=ARGS[1]
+end
+
+# Manually adding stdlib path because '@stdlib' is not working
+push!(LOAD_PATH, STDLIB_PATH)
 
 include("../Solver.jl")
 include("../Pdp.jl")
