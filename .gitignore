@@ -1,2 +1,3 @@
 sysimage/sys.o
 sysimage/sys.so
+sysimage/log.txt
