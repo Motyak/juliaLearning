@@ -8,17 +8,17 @@ module Pdp
     using .Solver   #enum
 
     struct Input
-        m::Int16           #nombre de véhicules/transporteurs
-        n::Int16           #nombre de paires origine;destination (clients)
-        c::Array{Int16, 2} #matrice représentant la distance entre un sommet i et j
-        t::Array{Int16, 2} #matrice des durées de trajet du sommet i à j (en minutes)
-        e::Array{Int16}    #temps au plus tot pour commencer le service au sommet i
-        l::Array{Int16}    #temps au plus tard pour commencer le service au sommet i
+        m::Int32           #nombre de véhicules/transporteurs
+        n::Int32           #nombre de paires origine;destination (clients)
+        c::Array{Int32, 2} #matrice représentant la distance entre un sommet i et j
+        t::Array{Int32, 2} #matrice des durées de trajet du sommet i à j (en minutes)
+        e::Array{Int32}    #temps au plus tot pour commencer le service au sommet i
+        l::Array{Int32}    #temps au plus tard pour commencer le service au sommet i
     end
 
     struct Output
-        objectiveValue::Int16           #distance totale parcourue
-        objectiveTimes::Array{Int16, 2} #temps prévus chaque sommet chaque vehicule
+        objectiveValue::Int32           #distance totale parcourue
+        objectiveTimes::Array{Int32, 2} #temps prévus chaque sommet chaque vehicule
         timestamp::DateTime
         solveTime::Float32
         res::Array{Bool, 3} # = 1 si le véhicule k parcourt l'arc allant du sommet i à j
@@ -29,6 +29,7 @@ module Pdp
         timestamp = now()
         m, n, c, t, e, l = input.m, input.n, input.c, input.t, input.e, input.l
 
+        # need the 'Main.' prefix when calling from outside, don't know why
         if optimizer == Main.Solver.GLPK
             model = Model(GLPK.Optimizer)
         elseif optimizer == Main.Solver.CPLEX

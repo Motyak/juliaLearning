@@ -12,7 +12,7 @@ module PdpJson
         N = 2*n+m
 
         c_arrOfAny = data["c"]
-        c = Array{Int16, 2}(undef, N, N)
+        c = Array{Int32, 2}(undef, N, N)
         for i = 1:N
             for j = 1:N
                 c[i,j] = c_arrOfAny[i][j]
@@ -20,7 +20,7 @@ module PdpJson
         end
 
         t_arrOfAny = data["t"]
-        t = Array{Int16, 2}(undef, N, N)
+        t = Array{Int32, 2}(undef, N, N)
         for i = 1:N
             for j = 1:N
                 t[i,j] = t_arrOfAny[i][j]
@@ -28,13 +28,13 @@ module PdpJson
         end
 
         e_arrOfAny = data["e"]
-        e = Array{Int16}(undef, N)
+        e = Array{Int32}(undef, N)
         for i = 1:N
             e[i] = e_arrOfAny[i]
         end
 
         l_arrOfAny = data["l"]
-        l = Array{Int16}(undef, N)
+        l = Array{Int32}(undef, N)
         for i = 1:N
             l[i] = l_arrOfAny[i]
         end
