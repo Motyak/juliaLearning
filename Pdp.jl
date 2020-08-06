@@ -29,10 +29,9 @@ module Pdp
         timestamp = now()
         m, n, c, t, e, l = input.m, input.n, input.c, input.t, input.e, input.l
 
-        # need the 'Main.' prefix when calling from outside, don't know why
-        if optimizer == Main.Solver.GLPK
+        if optimizer == Solver.GLPK
             model = Model(GLPK.Optimizer)
-        elseif optimizer == Main.Solver.CPLEX
+        elseif optimizer == Solver.CPLEX
             model = Model(CPLEX.Optimizer)
         end
         println("Optimizer used : ", optimizer)

@@ -11,16 +11,6 @@ module Test
         y::Int32
     end
 
-    # mutable struct Test
-    #     input::Pdp.Input
-    #     output::Pdp.Output
-    #     execTime::Float32
-    #     functionnalPassed::Bool
-    #     qualityPassed::Bool
-    #     perfPassed::Bool
-    #     Test() = new(missing, missing, 999.9, false, false, false)
-    # end
-
     struct RandomInstance
         population::Int16
         minPerClass::Int16
@@ -29,13 +19,13 @@ module Test
 
     function performTesting()
         INSTANCES = 
-                [RandomInstance(5, 1, 4)        #Nmin = 6   Nmax = 9
-                ,RandomInstance(20, 4, 16)      #Nmin = 24  Nmax = 36
-                ,RandomInstance(80, 16, 64)]    #Nmin = 96  Nmax = 144
+                [
+                RandomInstance(5, 1, 4),        #Nmin = 6   Nmax = 9
+                # RandomInstance(20, 4, 16),      #Nmin = 24  Nmax = 36
+                # RandomInstance(80, 16, 64)      #Nmin = 96  Nmax = 144
+                ]
 
-        # for instance in INSTANCES
-        instance = "onsenfout"
-
+        for instance in INSTANCES
             println("starting tests with instance ", instance)
 
             # generate random input from instance parameters
@@ -51,26 +41,26 @@ module Test
             elapsed = (now() - start) / Millisecond(1000)
 
             if functionalTest(output)
-                println("Functional test passed ! (1/1 test passed)")
+                println("Functional test passed ! (1/3 test passed)")
             else
-                println("Functional test failed ! (0/1 test passed)")
+                println("Functional test failed ! (0/3 test passed)")
                 return
             end
 
-            if qualityTest(output)
-                println("Quality test passed ! (2/2 tests passed)")
+            if qualityTest(input, output)
+                println("Quality test passed ! (2/3 tests passed)")
             else
-                println("Quality test failed ! (1/2 test passed)")
+                println("Quality test failed ! (1/3 test passed)")
                 return
             end
 
-            if perfTest(output)
+            if perfTest(input, elapsed)
                 println("Performance test passed ! (3/3 tests passed)")
             else
                 println("Performance test failed ! (2/3 tests passed)")
                 return
             end
-        # end
+        end
     end
 
     function genInput(instance)
@@ -113,22 +103,45 @@ module Test
             l[i] = l[i-n] + rand(t[i-n,i]:t[i-n,i]+MAX_WAITING_TIME)
         end
 
-        # println(m)
-        # println(n)
-        # println(c)
-        # println(t)
-        # println(e)
-        # println(l)
         return Pdp.Input(m, n, c, t, e, l)
     end
     
+    # check if the output is coherent
     function functionalTest(output)
-        # check if the output is coherent
+        
+        # check if the output is filled (not None, no errors,..)
 
+        # verify that every taxi's route is coherent 
+        # (no teleportation from one vertex to another)
+
+        # verify that every taxi's schedule is coherent
+
+        return true #
     end
 
-    function qualityTest(output)
-        # check if the output quality is good
+    # check if the output quality is good based on the acceptance criteria
+    # which could be, in this case, the min objective value expected to reach
+    # the 5% best solutions from all combinations.
+    function qualityTest(input, output)
+
+        # store objective values of every possible solution from input
+
+        # calculate the 5% least value
+
+        # check if the output obj value is less or equal
+
+        return true #
+    end
+
+    # check if the execution time is convenient based on the input size
+    # and our acceptance criteria for performance
+    function perfTest(input, execTime)
+
+        # calculate expected value based on input
+
+        # check if the exec time is less or equal
+
+        return true #
     end
 
 end
