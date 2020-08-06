@@ -11,7 +11,14 @@ module Tcp
 		println("Launching TCP server..")
 		socket = listen(server.host, server.port)
 		println("Listening on ", server.host, ":", server.port, "..\n")
-		while true
+		shouldContinue = true
+		@async begin
+			readline()
+			println("\nServer interruption sent")
+			shouldContinue = false
+			connect(server.port)
+		end
+		while shouldContinue
 			println("Waiting for a connection..")
 			conn = accept(socket)
 			println("Connection accepted : ", conn)
@@ -31,11 +38,13 @@ module Tcp
 					close(conn)
 					println("Connection closed.\n")
 				catch err
-					print("Connection ended with error $err")
+					println("Connection ended with error $err")
 					close(conn)
 				end
 			end
 		end
+		println("Server stopped")
+		close(socket)
 	end
 
 	# test unitaire

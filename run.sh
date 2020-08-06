@@ -15,4 +15,13 @@ then
 else
     echo "Launching the server with arguments : $@"
 fi
+
+handleSigInt() {
+    echo -e "\njulia REPL interrupted incorrectly !\nYou should have pressed 'ENTER' instead !"
+    trap - SIGINT SIGTERM # clear the trap
+    kill -- -$$ # Sends SIGTERM to child/sub processes
+}
+
+trap handleSigInt SIGINT SIGTERM
+
 julia -Jsysimage/sys.so main.jl $@
