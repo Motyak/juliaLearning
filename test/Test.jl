@@ -3,6 +3,8 @@ module Test
     include("../Pdp.jl")
     using .Pdp
 
+    include("../Solver.jl")
+
     using Dates
     using Random
 

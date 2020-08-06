@@ -9,4 +9,4 @@ Pour build une custom sysimage (recommandé pour avoir de meilleures performance
 	$bash sysimage/build.sh
 
 Pour lancer une requête TCP au serveur avec client netcat (TUI) :
-	$nc localhost 8080 < input.json > output.json
+	$nc localhost 8080 < json/input.json > json/output.json

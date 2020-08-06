@@ -8,7 +8,7 @@ if [ -L "sysimage/sys.so" ]
 then
     echo -e "We recommend building a sysimage using 'sysimage/build.sh' for better performance!\n"
 fi
-if [ $# -eq 0 ] || [ $# -eq 1 ]
+if [ $# -lt 2 ]
 then
     echo "Launching the server with default arguments : 127.0.0.1 8080 glpk"
     echo -e "Prototype : $./run.sh [host] [port] [optimizer]"

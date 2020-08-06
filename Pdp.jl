@@ -111,26 +111,6 @@ module Pdp
 
         input = Input(2, 2, c, t, e, l)
 
-        # c = [10000 300 400 10000 10000;
-        #     10000 10000 10000 800 10000;
-        #     10000 10000 10000 10000 700;
-        #     10000 10000 1400 10000 10000;
-        #     1300 10000 10000 10000 10000]
-        
-        # t = [1440 15 20 1440 1440;
-        #     1440 1440 1440 40 1440;
-        #     1440 1440 1440 1440 35;
-        #     1440 1440 70 1440 1440;
-        #     65 1440 1440 1440 1440]
-        
-        # TIME_NOW = 720
-        
-        # e = [TIME_NOW, TIME_NOW, TIME_NOW, TIME_NOW, TIME_NOW]
-        
-        # l = [2879, TIME_NOW, TIME_NOW, TIME_NOW + 60, TIME_NOW + 60]
-        
-        # input = Input(1, 2, c, t, e, l)
-
         output = solve(input)
 
         println("obj value = ", output.objectiveValue)

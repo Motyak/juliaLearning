@@ -14,7 +14,7 @@ module Tcp
 		shouldContinue = true
 		@async begin
 			readline()
-			println("\nServer interruption sent")
+			println("Server interruption sent")
 			shouldContinue = false
 			connect(server.port)
 		end
@@ -35,11 +35,11 @@ module Tcp
 					output = server.process(msg)
 					println("Sending back output to client..")
 					write(conn, output)
+				catch err
+					println("An error occured : $err")
+				finally
 					close(conn)
 					println("Connection closed.\n")
-				catch err
-					println("Connection ended with error $err")
-					close(conn)
 				end
 			end
 		end
